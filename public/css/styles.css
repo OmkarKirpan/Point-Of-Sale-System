@@ -527,18 +527,50 @@ body .modal {
 .features {
  background-color: white;
  text-align:center;
- color: #284A75;
+ color: #6D6D6D;
  padding:90px 0 90px;
 }
 
 .features h1 {
- font-size: 2em;
+  font-size: 3em !important;
+  font-family: 'Permanent Marker', cursive;
+  color: #6D6D6D;
+  font-size: 2em;
+}
+
+.features .col-lg-6 p {
+  font-size: 1.5em;
 }
 
 .features img {
  padding: 125px 0 35px;
 }
 
+.lightPurple {
+  color: #E2A5DF;
+}
+
+.turqoise {
+  color: #1EBEA5;
+}
+
+.citrusGreen {
+  color: #FFB6C1;
+}
+
+.indianRed {
+  color: #CD5C5C;
+}
+
+.limeGreen {
+  color: #449D44;
+}
+.lightPink {
+  color: #FFB6C1;
+}
+.peach {
+  color: #FFDAB9;
+}
 
 /* Footer */
 
@@ -671,6 +703,25 @@ body .modal {
 }*/
 
 /* ------------ PreAuthNavTabs.jsx --------------------------------------------------------------*/
+#preAuthNavTabs .navbar-form {
+  padding-top: 3px;
+}
+#preAuthNavTabs li {
+  padding-top: 3px;
+  font-size: 1.1em;
+}
+#preAuthNavTabs li:first-child {
+  padding-left: 20px;
+}
+#preAuthNavTabs li a {
+  color: #284A75;
+  transition: all 0.2s ease-in-out;
+}
+
+#preAuthNavTabs li a:hover {
+  color: #2C87F3;
+}
+
 #forgotPassword {
   font-size: 0.6em;
   color: #DB4437;
@@ -935,7 +986,16 @@ body .modal {
 }
 
 /* ------------ LoginFormContainer.jsx --------------------------------------------------------------*/
-
+#loginBtn {
+  color: #2C87F3;
+  border-color: #2C87F3;
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+}
+#loginBtn:hover {
+  color: #284A75;
+  border-color: #284A75;
+}
 #loginEmail {
   margin-right: 10px;
   box-shadow: none;

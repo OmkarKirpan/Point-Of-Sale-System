@@ -71,10 +71,10 @@ class LoginFormContainer extends Component {
 						onChange={this.handleUpdateFormState} />
 				</div>
 
-				<button className="btn btn-primary" type="submit" name="submit">Log In</button>
+				<button id="loginBtn" className="btn btn-primary" type="submit" name="submit">Log In</button>
 
 				<div id="loginError" className="text-help center">
-					<Link to="/requestReset">Forgot Your Password?</Link>  {this.props.errorMessage}
+				 {this.props.errorMessage}
 				</div>
 
 			</form>

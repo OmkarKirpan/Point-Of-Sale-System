@@ -36080,18 +36080,12 @@
 					),
 					_react2.default.createElement(
 						'button',
-						{ className: 'btn btn-primary', type: 'submit', name: 'submit' },
+						{ id: 'loginBtn', className: 'btn btn-primary', type: 'submit', name: 'submit' },
 						'Log In'
 					),
 					_react2.default.createElement(
 						'div',
 						{ id: 'loginError', className: 'text-help center' },
-						_react2.default.createElement(
-							_reactRouter.Link,
-							{ to: '/requestReset' },
-							'Forgot Your Password?'
-						),
-						'  ',
 						this.props.errorMessage
 					)
 				);
@@ -36380,7 +36374,7 @@
 					{ id: 'landingPage' },
 					_react2.default.createElement(
 						'div',
-						{ className: 'features', id: 'features' },
+						{ className: 'features' },
 						_react2.default.createElement(
 							'div',
 							{ className: 'container' },
@@ -36389,7 +36383,7 @@
 								{ className: 'row' },
 								_react2.default.createElement(
 									'div',
-									{ className: 'col-lg-12 col-md-12' },
+									{ className: 'col-lg-6 col-md-6 col-lg-offset-3 col-md-offset-3' },
 									_react2.default.createElement(
 										'h1',
 										null,
@@ -36397,7 +36391,7 @@
 									),
 									_react2.default.createElement(
 										'p',
-										null,
+										{ className: 'lightOrange' },
 										'This app was built for pharmacies in Vietnam and Indonesia. Its purpose is to help pharmacies manage their inventories and sales digitally instead of through the current pen and paper.'
 									)
 								)
@@ -36408,7 +36402,7 @@
 								_react2.default.createElement(
 									'div',
 									{ className: 'col-lg-4 col-md-4 wow bounceInLeft' },
-									_react2.default.createElement('i', { className: 'fa fa-user-md fa-3x' }),
+									_react2.default.createElement('i', { className: 'fa fa-user-md fa-3x lightPurple' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
@@ -36419,7 +36413,7 @@
 										null,
 										'This app will sync all of your information across all your devices with just one single login.'
 									),
-									_react2.default.createElement('i', { className: 'fa fa-tags fa-3x' }),
+									_react2.default.createElement('i', { className: 'fa fa-tags fa-3x turqoise' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
@@ -36430,7 +36424,7 @@
 										null,
 										'Share your location with your friends so you can keep in touch, no matter where you are.'
 									),
-									_react2.default.createElement('i', { className: 'fa fa-battery-full fa-3x' }),
+									_react2.default.createElement('i', { className: 'fa fa-battery-full fa-3x lightPink' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
@@ -36450,7 +36444,7 @@
 								_react2.default.createElement(
 									'div',
 									{ className: 'col-lg-4 col-md-4 wow bounceInRight' },
-									_react2.default.createElement('i', { className: 'fa fa-share-square-o fa-3x' }),
+									_react2.default.createElement('i', { className: 'fa fa-share-square-o fa-3x secondaryBlue' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
@@ -36461,7 +36455,7 @@
 										null,
 										'Send your best posts or latest gossip to friends with the quick share button.'
 									),
-									_react2.default.createElement('i', { className: 'fa fa-film fa-3x' }),
+									_react2.default.createElement('i', { className: 'fa fa-film fa-3x indianRed' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
@@ -36472,7 +36466,7 @@
 										null,
 										'Download your videos to your device or stream video with superfast 4g data.'
 									),
-									_react2.default.createElement('i', { className: 'fa fa-money fa-3x' }),
+									_react2.default.createElement('i', { className: 'fa fa-money fa-3x limeGreen' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
