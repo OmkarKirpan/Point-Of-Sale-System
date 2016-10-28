@@ -1,20 +1,15 @@
 const jwt = require('jwt-simple');
-const User = require('../models/user'); //This will contain the user class, so it contains all instances of user
-const config = require('../secret');
-
-
-
-
-
-
-
-
+const __ = require('lodash');
+const faker = require('faker');
+//This will contain the user class, so it contains all instances of user
+const User = require('../models/user');
+const Product = require('../models/product');
 
 function tokenForUser(user) {
 	const timestamp = new Date().getTime();
 	//The first argument is the info we want to encode and the second is the secret string for decryption
 	// sub = subject, who is the subject of the token? The user, iat = issued at
-	return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
+	return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
 }
 
 
@@ -75,6 +70,45 @@ exports.signup = function(req, res, next) {
 			address: address,
 			profile: { name: name}
 		});
+
+		// create 500 fake products for the new user
+		// each product's owner key will be associated with
+		// this new user's id
+		__.times(500, index => {
+			console.log(index);
+			var product = new Product();
+
+			if (index <= 100) {
+				product.category = 'pharmaceutical';
+			} else if (index > 100 && index <= 200) {
+				product.category = 'herbal';
+			} else if (index > 200 && index <= 300) {
+				product.category = 'OTC';
+			} else if (index > 300 && index <= 400) {
+				product.category = 'consumer';
+			} else if (index > 400 && index <= 500) {
+				product.category = 'herbal';
+			}
+
+			product.owner = user._id;
+			product.name = faker.commerce.productAdjective();
+			product.subCategory = faker.commerce.productAdjective();
+			product.brand = faker.commerce.productAdjective();
+			product.tax = 10;
+			product.interactions = "Do not take with alcohol";
+			product.healthConditions = "Check with your physician";
+			product.locationOfProduct = faker.commerce.productAdjective();
+			product.manufacturer = faker.commerce.productAdjective();
+			product.manufacturerCountry = faker.commerce.productAdjective();
+			product.ingredients = faker.commerce.productAdjective();
+			product.price = 115;
+			product.dosageForm = faker.commerce.productAdjective();
+			product.typeOfProduct = faker.commerce.productAdjective();
+			product.quantity = 500;
+			product.description = "Enter product description here";
+			product.save();
+		});
+
 
 		//save new user to the database
 		user.save(function(err) {

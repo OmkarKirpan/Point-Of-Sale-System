@@ -14,7 +14,9 @@ class ProductProfile extends Component {
 	}
 
 	componentWillMount() {
-		this.props.fetchSingleProduct(this.props.params.id);
+		this.props.fetchSingleProduct(this.props.params.id).then(product => {
+			console.log(product);
+		});
 	}
 
 	handleEditProduct(productId) {
@@ -126,11 +128,9 @@ class ProductProfile extends Component {
 					</div>
 				</div>
 			);
-
-		}
-
-	}
-};
+		}// end if block
+	} // end render method
+}; // end class
 
 function mapStateToProps(state) {
 	return {
@@ -138,7 +138,7 @@ function mapStateToProps(state) {
 					 activeUser: state.user.activeUser,
 				   activeEmployee: state.employees.activeEmployee
 				 };
-}
+};
 
 
 export default connect(mapStateToProps, { fetchSingleProduct, deleteExistingProduct })(ProductProfile);

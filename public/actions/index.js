@@ -304,7 +304,9 @@ export function editExistingProduct(props) {
 
 	var config = {headers: {'authorization' : localStorage.getItem('token')}};
 
-	const request = axios.put('/editProduct', props, config);
+	const request = axios.put('/editProduct', props, config).then(response => {
+		console.log("Edit response ", response);
+	});
 
 	return {
 		type: EDIT_PRODUCT,

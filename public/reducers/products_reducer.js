@@ -45,7 +45,7 @@ export default function(state = INITIAL_STATE, action) {
 			return { ...state, OTC: action.payload.data };
 
 		case FETCH_SINGLE:
-			return {...state, singleProduct: action.payload.data };
+			return {...state, singleProduct: action.payload.data[0] };
 
 		default:
 			return state;

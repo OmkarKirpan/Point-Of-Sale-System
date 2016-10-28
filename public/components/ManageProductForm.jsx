@@ -95,7 +95,7 @@ class ManageProductForm extends Component {
 			}, () => {
 				resolve(this.state);
 			});
-			
+
 		});
 	}
 
@@ -124,6 +124,7 @@ class ManageProductForm extends Component {
         if (this.state.isEditForm) {
 					// this will edit an existing product
           let jsonProps = JSON.stringify(propsToSend);
+
 					// call action creator to submit edits
           this.props.editExistingProduct(jsonProps).then(() => {
 						// upon success return to the inventory

@@ -31786,7 +31786,7 @@
 				return _extends({}, state, { OTC: action.payload.data });
 
 			case _index.FETCH_SINGLE:
-				return _extends({}, state, { singleProduct: action.payload.data });
+				return _extends({}, state, { singleProduct: action.payload.data[0] });
 
 			default:
 				return state;
@@ -32149,7 +32149,9 @@
 
 		var config = { headers: { 'authorization': localStorage.getItem('token') } };
 
-		var request = _axios2.default.put('/editProduct', props, config);
+		var request = _axios2.default.put('/editProduct', props, config).then(function (response) {
+			console.log("Edit response ", response);
+		});
 
 		return {
 			type: EDIT_PRODUCT,
@@ -35813,9 +35815,9 @@
 	  _createClass(NavBarContainer, [{
 	    key: 'render',
 	    value: function render() {
-	      var _props = this.props;
-	      var activeUser = _props.activeUser;
-	      var activeEmployee = _props.activeEmployee;
+	      var _props = this.props,
+	          activeUser = _props.activeUser,
+	          activeEmployee = _props.activeEmployee;
 
 
 	      if (activeUser) {
@@ -35865,8 +35867,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Navbar = function Navbar(_ref) {
-		var activeUser = _ref.activeUser;
-		var activeEmployee = _ref.activeEmployee;
+		var activeUser = _ref.activeUser,
+		    activeEmployee = _ref.activeEmployee;
 
 
 		return _react2.default.createElement(
@@ -36026,9 +36028,9 @@
 
 				event.preventDefault();
 
-				var _props = this.props;
-				var loginUser = _props.loginUser;
-				var authError = _props.authError;
+				var _props = this.props,
+				    loginUser = _props.loginUser,
+				    authError = _props.authError;
 
 
 				loginUser(this.state).then(function () {
@@ -36125,8 +36127,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var PostAuthNavTabs = function PostAuthNavTabs(_ref) {
-	  var activeUser = _ref.activeUser;
-	  var activeEmployee = _ref.activeEmployee;
+	  var activeUser = _ref.activeUser,
+	      activeEmployee = _ref.activeEmployee;
 
 
 	  return _react2.default.createElement(
@@ -36656,14 +36658,14 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _props = this.props;
-				var _props$fields = _props.fields;
-				var name = _props$fields.name;
-				var company = _props$fields.company;
-				var email = _props$fields.email;
-				var address = _props$fields.address;
-				var password = _props$fields.password;
-				var handleSubmit = _props.handleSubmit;
+				var _props = this.props,
+				    _props$fields = _props.fields,
+				    name = _props$fields.name,
+				    company = _props$fields.company,
+				    email = _props$fields.email,
+				    address = _props$fields.address,
+				    password = _props$fields.password,
+				    handleSubmit = _props.handleSubmit;
 				// const title = this.props.fields.email in ES5
 
 				return _react2.default.createElement(
@@ -36958,17 +36960,17 @@
 	    value: function renderLoadProductBtn() {
 
 	      // const { showAll, showPharma, showHerbals, showProductsNum } = this.state;
-	      var _props = this.props;
-	      var showAll = _props.showAll;
-	      var showPharma = _props.showPharma;
-	      var showHerbals = _props.showHerbals;
-	      var showConsumer = _props.showConsumer;
-	      var showOTC = _props.showOTC;
-	      var allProducts = _props.allProducts;
-	      var herbals = _props.herbals;
-	      var pharma = _props.pharma;
-	      var consumer = _props.consumer;
-	      var OTC = _props.OTC;
+	      var _props = this.props,
+	          showAll = _props.showAll,
+	          showPharma = _props.showPharma,
+	          showHerbals = _props.showHerbals,
+	          showConsumer = _props.showConsumer,
+	          showOTC = _props.showOTC,
+	          allProducts = _props.allProducts,
+	          herbals = _props.herbals,
+	          pharma = _props.pharma,
+	          consumer = _props.consumer,
+	          OTC = _props.OTC;
 	      var showProductsNum = this.state.showProductsNum;
 
 
@@ -36987,17 +36989,17 @@
 	  }, {
 	    key: 'renderProducts',
 	    value: function renderProducts() {
-	      var _props2 = this.props;
-	      var showAll = _props2.showAll;
-	      var showPharma = _props2.showPharma;
-	      var showHerbals = _props2.showHerbals;
-	      var showConsumer = _props2.showConsumer;
-	      var showOTC = _props2.showOTC;
-	      var allProducts = _props2.allProducts;
-	      var herbals = _props2.herbals;
-	      var pharma = _props2.pharma;
-	      var consumer = _props2.consumer;
-	      var OTC = _props2.OTC;
+	      var _props2 = this.props,
+	          showAll = _props2.showAll,
+	          showPharma = _props2.showPharma,
+	          showHerbals = _props2.showHerbals,
+	          showConsumer = _props2.showConsumer,
+	          showOTC = _props2.showOTC,
+	          allProducts = _props2.allProducts,
+	          herbals = _props2.herbals,
+	          pharma = _props2.pharma,
+	          consumer = _props2.consumer,
+	          OTC = _props2.OTC;
 	      var showProductsNum = this.state.showProductsNum;
 
 
@@ -37056,13 +37058,13 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props3 = this.props;
-	      var showAll = _props3.showAll;
-	      var showPharma = _props3.showPharma;
-	      var showHerbals = _props3.showHerbals;
-	      var showConsumer = _props3.showConsumer;
-	      var showOTC = _props3.showOTC;
-	      var allProducts = _props3.allProducts;
+	      var _props3 = this.props,
+	          showAll = _props3.showAll,
+	          showPharma = _props3.showPharma,
+	          showHerbals = _props3.showHerbals,
+	          showConsumer = _props3.showConsumer,
+	          showOTC = _props3.showOTC,
+	          allProducts = _props3.allProducts;
 	      var showProductsNum = this.state.showProductsNum;
 
 
@@ -37272,12 +37274,12 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ProductFilter = function ProductFilter(_ref) {
-	  var showAll = _ref.showAll;
-	  var showPharma = _ref.showPharma;
-	  var showHerbals = _ref.showHerbals;
-	  var showConsumer = _ref.showConsumer;
-	  var showOTC = _ref.showOTC;
-	  var handleFilter = _ref.handleFilter;
+	  var showAll = _ref.showAll,
+	      showPharma = _ref.showPharma,
+	      showHerbals = _ref.showHerbals,
+	      showConsumer = _ref.showConsumer,
+	      showOTC = _ref.showOTC,
+	      handleFilter = _ref.handleFilter;
 
 	  // In order to add the | symbol here, the onClick handler needs to check for a value via the ref system
 	  // not the innerHTML
@@ -37386,9 +37388,9 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _props = this.props;
-				var product = _props.product;
-				var showReceipt = _props.showReceipt;
+				var _props = this.props,
+				    product = _props.product,
+				    showReceipt = _props.showReceipt;
 
 
 				return _react2.default.createElement(
@@ -37456,9 +37458,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SingleProductSymbol = function SingleProductSymbol(_ref) {
-	  var productCategory = _ref.productCategory;
-	  var handleAddProduct = _ref.handleAddProduct;
-	  var showReceipt = _ref.showReceipt;
+	  var productCategory = _ref.productCategory,
+	      handleAddProduct = _ref.handleAddProduct,
+	      showReceipt = _ref.showReceipt;
 
 	  if (productCategory === 'herbal') {
 
@@ -37621,20 +37623,20 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props = this.props;
-	      var cart = _props.cart;
-	      var addToCart = _props.addToCart;
-	      var decrementProductInCart = _props.decrementProductInCart;
-	      var clearProductInCart = _props.clearProductInCart;
-	      var calculateCartTotals = _props.calculateCartTotals;
-	      var cartSubtotal = _props.cartSubtotal;
-	      var tax = _props.tax;
-	      var cartTotal = _props.cartTotal;
-	      var showReceipt = _props.showReceipt;
-	      var lastSale = _props.lastSale;
-	      var undoSale = _props.undoSale;
-	      var hideReceipt = _props.hideReceipt;
-	      var clearCart = _props.clearCart;
+	      var _props = this.props,
+	          cart = _props.cart,
+	          addToCart = _props.addToCart,
+	          decrementProductInCart = _props.decrementProductInCart,
+	          clearProductInCart = _props.clearProductInCart,
+	          calculateCartTotals = _props.calculateCartTotals,
+	          cartSubtotal = _props.cartSubtotal,
+	          tax = _props.tax,
+	          cartTotal = _props.cartTotal,
+	          showReceipt = _props.showReceipt,
+	          lastSale = _props.lastSale,
+	          undoSale = _props.undoSale,
+	          hideReceipt = _props.hideReceipt,
+	          clearCart = _props.clearCart;
 
 
 	      return _react2.default.createElement(
@@ -37773,8 +37775,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var CartHeader = function CartHeader(_ref) {
-	  var cart = _ref.cart;
-	  var showReceipt = _ref.showReceipt;
+	  var cart = _ref.cart,
+	      showReceipt = _ref.showReceipt;
 
 	  if (cart.length === 0) {
 
@@ -37841,13 +37843,13 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var CartProductsTable = function CartProductsTable(_ref) {
-	  var cart = _ref.cart;
-	  var decrementProductInCart = _ref.decrementProductInCart;
-	  var calculateCartTotals = _ref.calculateCartTotals;
-	  var showReceipt = _ref.showReceipt;
-	  var handlePlusBtn = _ref.handlePlusBtn;
-	  var handleMinusBtn = _ref.handleMinusBtn;
-	  var clearProductInCart = _ref.clearProductInCart;
+	  var cart = _ref.cart,
+	      decrementProductInCart = _ref.decrementProductInCart,
+	      calculateCartTotals = _ref.calculateCartTotals,
+	      showReceipt = _ref.showReceipt,
+	      handlePlusBtn = _ref.handlePlusBtn,
+	      handleMinusBtn = _ref.handleMinusBtn,
+	      clearProductInCart = _ref.clearProductInCart;
 
 	  return _react2.default.createElement(
 	    'table',
@@ -37908,13 +37910,13 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var CartProductRow = function CartProductRow(_ref) {
-	  var product = _ref.product;
-	  var decrementProductInCart = _ref.decrementProductInCart;
-	  var calculateCartTotals = _ref.calculateCartTotals;
-	  var showReceipt = _ref.showReceipt;
-	  var handlePlusBtn = _ref.handlePlusBtn;
-	  var handleMinusBtn = _ref.handleMinusBtn;
-	  var clearProductInCart = _ref.clearProductInCart;
+	  var product = _ref.product,
+	      decrementProductInCart = _ref.decrementProductInCart,
+	      calculateCartTotals = _ref.calculateCartTotals,
+	      showReceipt = _ref.showReceipt,
+	      handlePlusBtn = _ref.handlePlusBtn,
+	      handleMinusBtn = _ref.handleMinusBtn,
+	      clearProductInCart = _ref.clearProductInCart;
 
 
 	  return _react2.default.createElement(
@@ -37999,10 +38001,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var PlusMinusBtns = function PlusMinusBtns(_ref) {
-	  var product = _ref.product;
-	  var handlePlusBtn = _ref.handlePlusBtn;
-	  var handleMinusBtn = _ref.handleMinusBtn;
-	  var showReceipt = _ref.showReceipt;
+	  var product = _ref.product,
+	      handlePlusBtn = _ref.handlePlusBtn,
+	      handleMinusBtn = _ref.handleMinusBtn,
+	      showReceipt = _ref.showReceipt;
 
 	  return _react2.default.createElement(
 	    'div',
@@ -38080,9 +38082,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var CartTotalsTable = function CartTotalsTable(_ref) {
-	  var cartSubtotal = _ref.cartSubtotal;
-	  var tax = _ref.tax;
-	  var cartTotal = _ref.cartTotal;
+	  var cartSubtotal = _ref.cartSubtotal,
+	      tax = _ref.tax,
+	      cartTotal = _ref.cartTotal;
 
 	  return _react2.default.createElement(
 	    "div",
@@ -38194,9 +38196,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var UndoSaleBtn = function UndoSaleBtn(_ref) {
-	  var hideReceipt = _ref.hideReceipt;
-	  var handleUndoSale = _ref.handleUndoSale;
-	  var lastSale = _ref.lastSale;
+	  var hideReceipt = _ref.hideReceipt,
+	      handleUndoSale = _ref.handleUndoSale,
+	      lastSale = _ref.lastSale;
 
 	  return _react2.default.createElement(
 	    'div',
@@ -61400,7 +61402,9 @@
 		_createClass(ProductProfile, [{
 			key: 'componentWillMount',
 			value: function componentWillMount() {
-				this.props.fetchSingleProduct(this.props.params.id);
+				this.props.fetchSingleProduct(this.props.params.id).then(function (product) {
+					console.log(product);
+				});
 			}
 		}, {
 			key: 'handleEditProduct',
@@ -61698,14 +61702,15 @@
 							)
 						)
 					);
-				}
-			}
+				} // end if block
+			} // end render method
+
 		}]);
 
 		return ProductProfile;
 	}(_react.Component);
 
-	;
+	; // end class
 
 	function mapStateToProps(state) {
 		return {
@@ -61713,7 +61718,7 @@
 			activeUser: state.user.activeUser,
 			activeEmployee: state.employees.activeEmployee
 		};
-	}
+	};
 
 		exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchSingleProduct: _Actions.fetchSingleProduct, deleteExistingProduct: _Actions.deleteExistingProduct })(ProductProfile);
 
@@ -61771,9 +61776,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var EditProductBtn = function EditProductBtn(_ref) {
-	  var handleEditProduct = _ref.handleEditProduct;
-	  var productId = _ref.productId;
-	  var size = _ref.size;
+	  var handleEditProduct = _ref.handleEditProduct,
+	      productId = _ref.productId,
+	      size = _ref.size;
 
 	  return _react2.default.createElement('i', { onClick: function onClick() {
 	      handleEditProduct(productId);
@@ -62089,7 +62094,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
-	//! version : 2.15.1
+	//! version : 2.15.2
 	//! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 	//! license : MIT
 	//! momentjs.com
@@ -62920,7 +62925,7 @@
 
 	    // LOCALES
 
-	    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
+	    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/;
 	    var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
 	    function localeMonths (m, format) {
 	        if (!m) {
@@ -66285,7 +66290,7 @@
 	    // Side effect imports
 
 
-	    utils_hooks__hooks.version = '2.15.1';
+	    utils_hooks__hooks.version = '2.15.2';
 
 	    setHookCallback(local__createLocal);
 
@@ -71267,7 +71272,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
-	//! locale : Japanese [jv]
+	//! locale : Javanese [jv]
 	//! author : Rony Lantip : https://github.com/lantip
 	//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
 
@@ -72032,7 +72037,7 @@
 	        months : {
 	            format: 'sausio_vasario_kovo_balandžio_gegužės_birželio_liepos_rugpjūčio_rugsėjo_spalio_lapkričio_gruodžio'.split('_'),
 	            standalone: 'sausis_vasaris_kovas_balandis_gegužė_birželis_liepa_rugpjūtis_rugsėjis_spalis_lapkritis_gruodis'.split('_'),
-	            isFormat: /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?|MMMM?(\[[^\[\]]*\]|\s+)+D[oD]?/
+	            isFormat: /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?|MMMM?(\[[^\[\]]*\]|\s)+D[oD]?/
 	        },
 	        monthsShort : 'sau_vas_kov_bal_geg_bir_lie_rgp_rgs_spa_lap_grd'.split('_'),
 	        weekdays : {
@@ -76997,10 +77002,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var TaxThumbnail = function TaxThumbnail(_ref) {
-	  var tax = _ref.tax;
-	  var newTax = _ref.newTax;
-	  var handleTaxChange = _ref.handleTaxChange;
-	  var submitTax = _ref.submitTax;
+	  var tax = _ref.tax,
+	      newTax = _ref.newTax,
+	      handleTaxChange = _ref.handleTaxChange,
+	      submitTax = _ref.submitTax;
 
 	  return _react2.default.createElement(
 	    "div",
@@ -77064,12 +77069,12 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var AddEmployeeThumbnail = function AddEmployeeThumbnail(_ref) {
-	  var employeeName = _ref.employeeName;
-	  var employeeEmail = _ref.employeeEmail;
-	  var employeePassword = _ref.employeePassword;
-	  var employeePosition = _ref.employeePosition;
-	  var handleEmployeeInput = _ref.handleEmployeeInput;
-	  var addEmployee = _ref.addEmployee;
+	  var employeeName = _ref.employeeName,
+	      employeeEmail = _ref.employeeEmail,
+	      employeePassword = _ref.employeePassword,
+	      employeePosition = _ref.employeePosition,
+	      handleEmployeeInput = _ref.handleEmployeeInput,
+	      addEmployee = _ref.addEmployee;
 
 	  return _react2.default.createElement(
 	    "div",
@@ -77296,8 +77301,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ActiveEmployeeThumbnail = function ActiveEmployeeThumbnail(_ref) {
-	  var employee = _ref.employee;
-	  var logOutActiveEmployee = _ref.logOutActiveEmployee;
+	  var employee = _ref.employee,
+	      logOutActiveEmployee = _ref.logOutActiveEmployee;
 
 	  return _react2.default.createElement(
 	    'div',
@@ -77393,8 +77398,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var EmployeeSalesData = function EmployeeSalesData(_ref) {
-	  var title = _ref.title;
-	  var salesData = _ref.salesData;
+	  var title = _ref.title,
+	      salesData = _ref.salesData;
 
 	  return _react2.default.createElement(
 	    "div",
@@ -77539,12 +77544,12 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props = this.props;
-	      var singleEmployee = _props.singleEmployee;
-	      var activeUser = _props.activeUser;
-	      var _state$employeeLoginD = this.state.employeeLoginData;
-	      var employeeEmail = _state$employeeLoginD.employeeEmail;
-	      var employeePassword = _state$employeeLoginD.employeePassword;
+	      var _props = this.props,
+	          singleEmployee = _props.singleEmployee,
+	          activeUser = _props.activeUser;
+	      var _state$employeeLoginD = this.state.employeeLoginData,
+	          employeeEmail = _state$employeeLoginD.employeeEmail,
+	          employeePassword = _state$employeeLoginD.employeePassword;
 
 
 	      if ($.isEmptyObject(singleEmployee)) {
@@ -77834,10 +77839,10 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _state$employee = this.state.employee;
-	      var name = _state$employee.name;
-	      var email = _state$employee.email;
-	      var position = _state$employee.position;
+	      var _state$employee = this.state.employee,
+	          name = _state$employee.name,
+	          email = _state$employee.email,
+	          position = _state$employee.position;
 
 
 	      return _react2.default.createElement(
@@ -77971,8 +77976,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var DeleteBtn = function DeleteBtn(_ref) {
-	  var itemIdToDelete = _ref.itemIdToDelete;
-	  var handleDelete = _ref.handleDelete;
+	  var itemIdToDelete = _ref.itemIdToDelete,
+	      handleDelete = _ref.handleDelete;
 
 	  return _react2.default.createElement("i", { id: "deleteBtn",
 	    onClick: function onClick() {
@@ -78641,8 +78646,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SalesHistoryTable = function SalesHistoryTable(_ref) {
-		var sales = _ref.sales;
-		var numSalesShowing = _ref.numSalesShowing;
+		var sales = _ref.sales,
+		    numSalesShowing = _ref.numSalesShowing;
 
 
 		return _react2.default.createElement(
@@ -79025,8 +79030,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ComboBox = function ComboBox(_ref) {
-	  var name = _ref.name;
-	  var comboList = _ref.comboList;
+	  var name = _ref.name,
+	      comboList = _ref.comboList;
 
 
 	  return _react2.default.createElement(
@@ -79334,10 +79339,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var RevenueThumbnail = function RevenueThumbnail(_ref) {
-	  var totalRevenue = _ref.totalRevenue;
-	  var salesData = _ref.salesData;
-	  var name = _ref.name;
-	  var ChartComponent = _ref.ChartComponent;
+	  var totalRevenue = _ref.totalRevenue,
+	      salesData = _ref.salesData,
+	      name = _ref.name,
+	      ChartComponent = _ref.ChartComponent;
 
 
 	  return _react2.default.createElement(
@@ -79389,9 +79394,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var TopItemsPanel = function TopItemsPanel(_ref) {
-	  var name = _ref.name;
-	  var items = _ref.items;
-	  var TopItemsTable = _ref.TopItemsTable;
+	  var name = _ref.name,
+	      items = _ref.items,
+	      TopItemsTable = _ref.TopItemsTable;
 
 	  return _react2.default.createElement(
 	    "div",
@@ -79811,9 +79816,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var TodaysTopItemsRow = function TodaysTopItemsRow(_ref) {
-	  var item = _ref.item;
-	  var numSold = _ref.numSold;
-	  var rank = _ref.rank;
+	  var item = _ref.item,
+	      numSold = _ref.numSold,
+	      rank = _ref.rank;
 
 	  return _react2.default.createElement(
 	    'tr',
@@ -79945,9 +79950,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var WeeksTopItemsRow = function WeeksTopItemsRow(_ref) {
-	  var item = _ref.item;
-	  var numSold = _ref.numSold;
-	  var rank = _ref.rank;
+	  var item = _ref.item,
+	      numSold = _ref.numSold,
+	      rank = _ref.rank;
 
 	  return _react2.default.createElement(
 	    'tr',
@@ -80079,9 +80084,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var MonthsTopItemsRow = function MonthsTopItemsRow(_ref) {
-	  var item = _ref.item;
-	  var numSold = _ref.numSold;
-	  var rank = _ref.rank;
+	  var item = _ref.item,
+	      numSold = _ref.numSold,
+	      rank = _ref.rank;
 
 	  return _react2.default.createElement(
 	    'tr',
@@ -80296,6 +80301,7 @@
 						if (_this3.state.isEditForm) {
 							// this will edit an existing product
 							var jsonProps = JSON.stringify(propsToSend);
+
 							// call action creator to submit edits
 							_this3.props.editExistingProduct(jsonProps).then(function () {
 								// upon success return to the inventory
@@ -80655,9 +80661,9 @@
 	  }, {
 	    key: 'handleSubmit',
 	    value: function handleSubmit() {
-	      var _props = this.props;
-	      var resetPassword = _props.resetPassword;
-	      var authError = _props.authError;
+	      var _props = this.props,
+	          resetPassword = _props.resetPassword,
+	          authError = _props.authError;
 
 
 	      var token = this.props.params.token;
@@ -80813,9 +80819,9 @@
 	  _createClass(ForgotPassword, [{
 	    key: 'handleSubmit',
 	    value: function handleSubmit() {
-	      var _props = this.props;
-	      var resetEmployeePassword = _props.resetEmployeePassword;
-	      var authError = _props.authError;
+	      var _props = this.props,
+	          resetEmployeePassword = _props.resetEmployeePassword,
+	          authError = _props.authError;
 
 
 	      var token = this.props.params.token;

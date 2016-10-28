@@ -1,7 +1,6 @@
 const passport = require('passport');
 const User = require('../models/user');
 const Employee = require('../models/employee');
-const config = require('../secret');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local');
@@ -73,7 +72,7 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
 
 const jwtOptions = {
 	jwtFromRequest: ExtractJwt.fromHeader('authorization'), //Tells jwtStrategy where to look for the jwt on the incoming request object (from header's auth. field)
-	secretOrKey: config.secret //This is the secret string for decoding all JWT's
+	secretOrKey: process.env.JWT_SECRET //This is the secret string for decoding all JWT's
 };
 
 // Create JWT Strategy

@@ -1,3 +1,6 @@
+// load environment configurations
+require('./settings/config');
+
 //to run: 'npm run dev' -- serves with nodemon
 const express = require('express');
 const http = require('http');
@@ -14,13 +17,12 @@ const reportingRouter = require('./routers/reportingRouter');
 
 
 const mongoose = require('mongoose');
-const config = require('./secret');
 const webpack = require('webpack');
 const path = require('path');
 
 // DB Setup for mlab
 
-mongoose.connect(config.database, function(err) {
+mongoose.connect(process.env.MONGODB_URI, function(err) {
 	if (err) {
 		console.log(err);
 	} else {
@@ -57,11 +59,9 @@ app.get('*', function (req, res) {
 	res.sendFile(path.resolve(__dirname + '/public/index.html'));
 });
 
+//Server Setup and Initialization
 
-
-//Server Setup
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 //Define http server below and set up
 

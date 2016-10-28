@@ -24,8 +24,6 @@ const passport = require('passport');
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireLogin = passport.authenticate('local', { session: false });
 
-const config = require('../secret');
-
 module.exports = function (app) {
 
 	app.post('/login', requireLogin, Authentication.login);
@@ -95,8 +93,8 @@ module.exports = function (app) {
 		    var smtpTransport = nodemailer.createTransport('SMTP', {
 		      service: 'SendGrid',
 		      auth: {
-		        user: config.sendGridUser,
-		        pass: config.sendGridPass
+		        user: process.env.SEND_USER,
+		        pass: process.env.SEND_PASS
 		      }
 		    });
 
@@ -166,8 +164,8 @@ module.exports = function (app) {
 	      var smtpTransport = nodemailer.createTransport('SMTP', {
 	        service: 'SendGrid',
 	        auth: {
-	          user: config.sendGridUser,
-	          pass: config.sendGridPass
+	          user: process.env.SEND_USER,
+	          pass: process.env.SEND_PASS
 	        }
 	      });
 	      var mailOptions = {

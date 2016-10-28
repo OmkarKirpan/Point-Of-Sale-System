@@ -1,46 +1,42 @@
-// require mongoose models
-const User = require('../models/user');
-const Employee = require('../models/employee');
-const Product = require('../models/product');
-const Sale = require('../models/sale');
-
 // require javascript helper libraries
 const _ = require('underscore');
 const faker = require('faker');
-const moment = require('moment');
-const async = require('async');
-const parallel = require('async/parallel');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
 const __ = require('lodash');
+const passport = require('passport');
+
+// import route protection middleware
+const requireAuth = passport.authenticate('jwt', { session: false });
+
+// require mongoose models
+const Product = require('../models/product');
 
 module.exports = function(app) {
 
-
-
-
-  // deletes 1 product by ID
-	app.delete(`/deleteProduct/:productId`, function(req, res, next) {
-
+  // deletes 1 product associated with a single user by ID
+	app.delete(`/deleteProduct/:productId`, requireAuth, function(req, res, next) {
 		Product
-		.findByIdAndRemove(req.params.productId, (err, deletedProduct) => {
+		.remove({
+			owner: req.user._id,
+			_id: req.params.productId
+		}, (err, deletedProduct) => {
 			if (err) { return next(err); }
+
 			res.status(200).json(deletedProduct);
 		});
-
 	});
 
-
-
-
-  //Returns all products based on their category  also checks for query parameter for pulling products by name
-	app.get('/products/:category', function(req, res, next) {
+  // Returns all products associated with a single user based
+	// on their category, also checks for query parameter for pulling products by name
+	app.get('/products/:category', requireAuth, function(req, res, next) {
 
 		var queryParams = req.query;
 		var filteredProducts;
 
 			Product
-			.find({ category: req.params.category })
+			.find({
+				owner: req.user._id,
+				category: req.params.category
+			})
 			.exec(function(err, products) {
 
 				filteredProducts = products;
@@ -64,49 +60,48 @@ module.exports = function(app) {
 			});
 	});
 
-
-
-
-	app.get('/fetchAllProducts', function(req, res, next) {
+	// returns all products associated with a single user
+	app.get('/fetchAllProducts', requireAuth, function(req, res, next) {
 
 		var queryParams = req.query;
 		var filteredProducts;
 
+		Product
+		.find({ owner: req.user._id })
+		.exec(function(err, products) {
+			filteredProducts = products;
 
-			Product
-			.find()
-			.exec(function(err, products) {
+			if (err) { return next(err); }
 
-				filteredProducts = products;
+			if (queryParams.hasOwnProperty('q') && queryParams.q.length > 0) {
 
-				if (err) { return next(err); }
+				filteredProducts = _.filter(products, function(product) {
+					return product.name.toLowerCase().indexOf(queryParams.q.toLowerCase()) > -1;
+				}); // The filteredProducts array will only contain product objects where the name contains the queryParameter.q
+					 // If the conditional attached to the return statement returns true,
+					// then the single product item it's checking gets added to filteredProducts array
+			}
 
-				if (queryParams.hasOwnProperty('q') && queryParams.q.length > 0) {
-
-					filteredProducts = _.filter(products, function(product) {
-						return product.name.toLowerCase().indexOf(queryParams.q.toLowerCase()) > -1;
-					}); // The filteredProducts array will only contain product objects where the name contains the queryParameter.q
-						 // If the conditional attached to the return statement returns true,
-						// then the single product item it's checking gets added to filteredProducts array
-				}
-
-				const productsAscendingOrder = filteredProducts.sort((a, b) => {
-					return b.numTimesSold - a.numTimesSold;
-				});
-
-				res.status(200).json(productsAscendingOrder);
-
+			const productsAscendingOrder = filteredProducts.sort((a, b) => {
+				return b.numTimesSold - a.numTimesSold;
 			});
 
+			res.status(200).json(productsAscendingOrder);
+		});
 	});
 
 
 
 
-	// Returns a single product from the database based on id
-	app.get('/fetchSingleProduct/:id', function(req, res, next) {
+	// Returns a single product associated with a single user
+	// from the database based on product's id
+	app.get('/fetchSingleProduct/:id', requireAuth, function(req, res, next) {
 
-		Product.findById(req.params.id)
+		Product
+		.find({
+	  	owner: req.user._id,
+			_id: req.params.id
+		})
 		.then((product)=> {
 			res.json(product);
 		}, (error) => {
@@ -115,50 +110,51 @@ module.exports = function(app) {
 
 	});
 
+ //This route updates an existing product's data
+ app.put('/editProduct', requireAuth, function(req, res, next) {
+
+	 Product
+	 .findOne({
+		 _id: req.body.productId,
+		 owner: req.user._id
+	 })
+	 .then(product => {
+
+		 product.name = req.body.name;
+		 product.category = req.body.category;
+		 product.subCategory = req.body.subCategory;
+		 product.brand = req.body.brand;
+		 product.locationOfProduct = req.body.locationOfProduct;
+		 product.manufacturer = req.body.manufacturer;
+		 product.manufacturerCountry = req.body.manufacturerCountry;
+		 product.ingredients = req.body.ingredients;
+		 product.price = req.body.price;
+		 product.dosageForm = req.body.dosageForm;
+		 product.typeOfProduct = req.body.typeOfProduct;
+		 product.quantity = req.body.quantity;
+		 product.description = req.body.description;
+
+		 return product.save(function(err) {
+			 if (err) { return next(err); }
+			 return res.status(200).json(product); //Returns the sale so that it can be used in the sale_reducer.js
+		 });
+	 });
+
+ });
 
 
 
-  //This route updates an existing product's data
-	app.put('/editProduct', function(req, res, next) {
 
-		Product.findById(req.body.productId).then((product) => {
-
-			product.name = req.body.name;
-			product.category = req.body.category;
-			product.subCategory = req.body.subCategory;
-			product.brand = req.body.brand;
-			product.locationOfProduct = req.body.locationOfProduct;
-			product.manufacturer = req.body.manufacturer;
-			product.manufacturerCountry = req.body.manufacturerCountry;
-			product.ingredients = req.body.ingredients;
-			product.price = req.body.price;
-			product.dosageForm = req.body.dosageForm;
-			product.typeOfProduct = req.body.typeOfProduct;
-			product.quantity = req.body.quantity;
-			product.description = req.body.description;
-
-			return product.save(function(err) {
-				if (err) { return next(err); }
-				return res.status(200).json(product); //Returns the sale so that it can be used in the sale_reducer.js
-			});
-		});
-
-	});
-
-
-
-
-	//creates a new product
-	app.post('/createProduct', function(req, res, next) {
+	//creates a new product associated with a single user
+	app.post('/createProduct', requireAuth, function(req, res, next) {
 
 		var product = new Product();
-
 
 		//This is the exact order in which the product model is defined in
 		//models/product.js and also the exact order a new product's info is entered
 		//in NewProductForm.js
 
-		product.owner = req.body.owner;
+		product.owner = req.user._id;
 		product.name = req.body.name;
 		product.category = req.body.category;
 		product.subCategory = req.body.subCategory;
@@ -179,15 +175,7 @@ module.exports = function(app) {
 
 		product.save();
 
-		return res.json("A new custom product was created");
-
+		return res.status(200).json("A new custom product was created");
 	});
 
-
-
-
-
-
-
-
-}
+} // end module.exports
