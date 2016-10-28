@@ -220,7 +220,6 @@ export function logOutActiveEmployee() {
 }
 
 export function loginUser(props) {
-
 	// should I convert the props to JSON before sending?
 	const request = axios.post(`/login`, props);
 
@@ -354,34 +353,10 @@ export function forgotEmployeePassword(employeeEmail) {
 
 }
 
-// export function fetchHerbals() {
-//
-// 	var config = {headers: {'authorization' : localStorage.getItem('token')}};
-//
-// 	//mlab configuration
-// 	// const herbalsID = '57120d5b66462f28037c853f';
-// 	// const request = axios.get(`/products/57120d5b66462f28037c853f`, config); //'token' is passed along in the request via config object
-//
-// 	//local database configuration
-// 	// const herbalsID = '572a5fa37a9caf990e3303ae';
-// 	const request = axios.get(`/products/herbal`, config);
-//
-// 	return {
-// 		type: FETCH_HERBALS,
-// 		payload: request
-// 	};
-// }
-
 export function searchHerbals(queryParams) {
 
 	var config = {headers: {'authorization' : localStorage.getItem('token')}};
 
-	//mlab configuration
-	// const herbalsID = '57120d5b66462f28037c853f';
-	// const request = axios.get(`/products/57120d5b66462f28037c853f?q=${queryParams}`, config);
-
-	//local database configuration
-	// const herbalsID = '572a5fa37a9caf990e3303ae';
 	const request = axios.get(`/products/herbal?q=${queryParams}`, config);
 
 	return {
@@ -391,35 +366,10 @@ export function searchHerbals(queryParams) {
 
 }
 
-// export function fetchPharma() {
-//
-// 	var config = {headers: {'authorization' : localStorage.getItem('token')}};
-//
-// 	//mlab configuration
-// 	// const pharmaID = '571201a269017ed102820e67';
-// 	// const request = axios.get(`/products/571201a269017ed102820e67`, config); //'token' is passed along in the request via config object
-//
-// 	//local database configuration
-// 	// const pharmaID = '572a5faf7a9caf990e3303af';
-// 	const request = axios.get(`/products/pharmaceutical`, config);
-//
-// 	return {
-// 		type: FETCH_PHARMA,
-// 		payload: request
-// 	};
-//
-// }
-
 export function searchPharma(queryParams) {
 
 	var config = {headers: {'authorization' : localStorage.getItem('token')}};
 
-	//mlab configuration
-	// const pharmaID = '571201a269017ed102820e67';
-	// const request = axios.get(`/products/571201a269017ed102820e67?q=${queryParams}`, config);
-
-	//local database configuration
-	// const pharmaID = '572a5faf7a9caf990e3303af';
 	const request = axios.get(`/products/pharmaceutical?q=${queryParams}`, config);
 
 	return {

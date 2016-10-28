@@ -1,10 +1,7 @@
 
 // require javascript helper libraries
-const _ = require('underscore');
 const faker = require('faker');
-const moment = require('moment');
-const async = require('async');
-const parallel = require('async/parallel');
+const waterfall = require('async/waterfall');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const __ = require('lodash');
@@ -12,8 +9,6 @@ const __ = require('lodash');
 // require mongoose models
 const User = require('../models/user');
 const Employee = require('../models/employee');
-const Product = require('../models/product');
-const Sale = require('../models/sale');
 
 // require passport.js services
 const Authentication = require('../authentication/authentication');
@@ -43,7 +38,7 @@ module.exports = function (app) {
 			var employeeRequest = true;
 		}
 
-		async.waterfall([
+		waterfall([
 			function(done) {
 				crypto.randomBytes(20, function(err, buf) {
         var token = buf.toString('hex');
@@ -121,12 +116,8 @@ module.exports = function (app) {
 								 \n
 								 The URL will expire in 1 hour for security reasons.
 								 If you didn’t make this request, simply ignore this message.`
-
-					//  'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-		      //   'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-		      //   'http://' + req.headers.host + resetRoute + token + '\n\n' +
-		      //   'If you did not request this, please ignore this email and your password will remain unchanged.\n'
 		    };
+
 		  	smtpTransport.sendMail(mailOptions, function(err) {
 		    	done(err, 'done');
 		  	});
@@ -141,7 +132,7 @@ module.exports = function (app) {
 	// POST resetPassword route actually changes the user's password in the database
 	app.post('/resetPassword/:token', function(req, res) {
 
-	  async.waterfall([
+	  waterfall([
 	    function(done) {
 
 				User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
@@ -192,74 +183,4 @@ module.exports = function (app) {
 		res.json(req.user);
 	});
 
-
-	///FOR TESTING ONLY
-	app.post('/createThousand', function (req, res, next) {
-
-		__.times(1000, (index) => {
-
-			var product = new Product();
-
-			if (index % 2 === 0) {
-				product.category = 'herbal';
-			} else if (index % 3 === 0) {
-				product.category = 'pharmaceutical';
-			} else {
-				product.category = "consumer";
-			}
-
-			product.owner = '573a02d8fd05850b05adf26d';
-			product.name = faker.commerce.productAdjective();
-			product.subCategory = faker.commerce.productAdjective();
-			product.brand = faker.commerce.productAdjective();
-			product.tax = 10;
-			product.interactions = "Do not take with alcohol";
-			product.healthConditions = "Check with your physician";
-			product.locationOfProduct = faker.commerce.productAdjective();
-			product.manufacturer = faker.commerce.productAdjective();
-			product.manufacturerCountry = faker.commerce.productAdjective();
-			product.ingredients = faker.commerce.productAdjective();
-			product.price = 115;
-			product.dosageForm = faker.commerce.productAdjective();
-			product.typeOfProduct = faker.commerce.productAdjective();
-			product.quantity = 500;
-			product.description = "Enter product description here";
-			product.save();
-
-		});
-
-	});
-
-
-	///FOR TESTING ONLY
-	app.post('/createThreeHundred', function (req, res, next) {
-
-		__.times(300, (index) => {
-
-			var product = new Product();
-
-
-			product.category = "OTC";
-			product.owner = '573a02d8fd05850b05adf26d';
-			product.name = faker.commerce.productAdjective();
-			product.subCategory = faker.commerce.productAdjective();
-			product.brand = faker.commerce.productAdjective();
-			product.tax = 10;
-			product.interactions = "Do not take with alcohol";
-			product.healthConditions = "Check with your physician";
-			product.locationOfProduct = faker.commerce.productAdjective();
-			product.manufacturer = faker.commerce.productAdjective();
-			product.manufacturerCountry = faker.commerce.productAdjective();
-			product.ingredients = faker.commerce.productAdjective();
-			product.price = 115;
-			product.dosageForm = faker.commerce.productAdjective();
-			product.typeOfProduct = faker.commerce.productAdjective();
-			product.quantity = 500;
-			product.description = "Enter product description here";
-			product.save();
-
-		});
-
-	});
-
-}
+} // end module.exports

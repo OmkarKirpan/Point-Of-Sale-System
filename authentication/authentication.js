@@ -12,29 +12,12 @@ function tokenForUser(user) {
 	return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
 }
 
-
-
-
-
-
-
-
-
 exports.login =  function(req, res, next) {
 	//user has already had email and password auth'ed, the user is returned from passport's localLogin function as req.user
 
 	//Time to assign a jwt (log them in)
 	res.send({ token: tokenForUser(req.user), user: req.user });
 }
-
-
-
-
-
-
-
-
-
 
 exports.signup = function(req, res, next) {
 
@@ -117,8 +100,6 @@ exports.signup = function(req, res, next) {
 			//Response returns the a jwt to the user (contains user id, and special string for decryption purposes)
 			res.json({ token: tokenForUser(user), user: user });
 		});
-
-
 
 	});
 
