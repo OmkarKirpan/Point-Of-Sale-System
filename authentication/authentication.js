@@ -75,7 +75,7 @@ exports.signup = function(req, res, next) {
 		// each product's owner key will be associated with
 		// this new user's id
 		__.times(500, index => {
-			console.log(index);
+
 			var product = new Product();
 
 			if (index <= 100) {
