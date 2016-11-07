@@ -56,7 +56,7 @@ class Signup extends Component {
 
      					{this.renderError()}
 
-      				<h4 className="center">Sign up below</h4>
+      				<h4>Sign up below</h4>
 
 							<form id="signupInfo" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 

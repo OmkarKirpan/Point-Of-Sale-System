@@ -36344,7 +36344,7 @@
 									_react2.default.createElement(
 										'p',
 										{ className: 'lightOrange' },
-										'This app was built for pharmacies in Vietnam and Indonesia. Its purpose is to help pharmacies manage their inventories and sales digitally instead of through the current pen and paper.'
+										'This app was built for pharmacies in Vietnam and Indonesia. Its purpose is to help pharmacies manage their inventories and sales digitally instead of through the current method of pen and paper.'
 									)
 								)
 							),
@@ -36363,7 +36363,7 @@
 									_react2.default.createElement(
 										'p',
 										null,
-										'This app will sync all of your information across all your devices with just one single login.'
+										'Employees can create their own sub-profiles and login. Their sales will be tracked live and justified with store wide data.'
 									),
 									_react2.default.createElement('i', { className: 'fa fa-tags fa-3x turqoise' }),
 									_react2.default.createElement(
@@ -36374,9 +36374,9 @@
 									_react2.default.createElement(
 										'p',
 										null,
-										'Share your location with your friends so you can keep in touch, no matter where you are.'
+										'Add products to your inventory to lay the foundation of an organized pharmacy.'
 									),
-									_react2.default.createElement('i', { className: 'fa fa-battery-full fa-3x lightPink' }),
+									_react2.default.createElement('i', { className: 'fa fa fa-exchange fa-3x slateGray' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
@@ -36385,7 +36385,7 @@
 									_react2.default.createElement(
 										'p',
 										null,
-										'Low level battery usage will ensure that the app will not run down your battery, even when the app is running in the background.'
+										'Immediately begin making sales after login through the user friendly sell page.'
 									)
 								),
 								_react2.default.createElement(
@@ -36396,7 +36396,7 @@
 								_react2.default.createElement(
 									'div',
 									{ className: 'col-lg-4 col-md-4 wow bounceInRight' },
-									_react2.default.createElement('i', { className: 'fa fa-share-square-o fa-3x secondaryBlue' }),
+									_react2.default.createElement('i', { className: 'fa fa-calculator fa-3x secondaryBlue' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
@@ -36405,9 +36405,9 @@
 									_react2.default.createElement(
 										'p',
 										null,
-										'Send your best posts or latest gossip to friends with the quick share button.'
+										'All products have a category which can be used to filter search results and easily locate a product\'s data.'
 									),
-									_react2.default.createElement('i', { className: 'fa fa-film fa-3x indianRed' }),
+									_react2.default.createElement('i', { className: 'fa fa-line-chart fa-3x indianRed' }),
 									_react2.default.createElement(
 										'h4',
 										{ className: 'lightOrange' },
@@ -36416,7 +36416,7 @@
 									_react2.default.createElement(
 										'p',
 										null,
-										'Download your videos to your device or stream video with superfast 4g data.'
+										'Track revenue data by day, week, and month in the reporting section. See which items are the top 10 sellers of the day, week, and month. Beautiful charts make sales data come alive.'
 									),
 									_react2.default.createElement('i', { className: 'fa fa-money fa-3x limeGreen' }),
 									_react2.default.createElement(
@@ -36427,14 +36427,14 @@
 									_react2.default.createElement(
 										'p',
 										null,
-										'Log into your desktop site and view your feed and videos on any browser at any time, even share links direct from your profile on the web.'
+										'Streamline inventory management and sales data to maximize profits and eliminate headaches.'
 									)
 								)
 							)
 						)
 					),
 					_react2.default.createElement(
-						'div',
+						'footer',
 						{ className: 'footer' },
 						_react2.default.createElement(
 							'div',
@@ -36444,69 +36444,64 @@
 								{ className: 'row' },
 								_react2.default.createElement(
 									'div',
-									{ className: 'col-lg-4 col-md-4' },
-									_react2.default.createElement(
-										'h1',
-										null,
-										'LOGO'
-									),
+									{ className: 'col-sm-4 col-xs-6' },
 									_react2.default.createElement(
 										'p',
-										null,
-										'Since 2015'
-									),
+										{ className: 'name' },
+										'Copyright \xA9 Marcus Hurney'
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'col-sm-4 col-xs-6' },
 									_react2.default.createElement(
-										'p',
-										null,
+										'ul',
+										{ className: 'social-links' },
 										_react2.default.createElement(
-											'em',
+											'li',
 											null,
-											'\'Delivering apps for low cost and maximum fun\''
-										)
-									)
-								),
-								_react2.default.createElement(
-									'div',
-									{ className: 'col-lg-4 col-md-4' },
-									_react2.default.createElement(
-										'h1',
-										null,
-										'GET IN TOUCH'
-									),
-									_react2.default.createElement(
-										'p',
-										null,
-										_react2.default.createElement('i', { className: 'fa fa-phone' }),
-										'1-800-888-0000'
-									),
-									_react2.default.createElement(
-										'p',
-										null,
-										_react2.default.createElement('i', { className: 'fa fa-envelope' }),
+											_react2.default.createElement(
+												'a',
+												{ href: 'https://www.facebook.com/marcus.hurney' },
+												_react2.default.createElement('i', { className: 'fa fa-facebook-square fa-2x', 'aria-hidden': 'true' })
+											)
+										),
 										_react2.default.createElement(
-											'a',
-											{ href: 'mailto:info@appname.com' },
-											'info@appname.com'
+											'li',
+											null,
+											_react2.default.createElement(
+												'a',
+												{ href: '#' },
+												_react2.default.createElement('i', { className: 'fa fa-twitter-square fa-2x', 'aria-hidden': 'true' })
+											)
+										),
+										_react2.default.createElement(
+											'li',
+											null,
+											_react2.default.createElement(
+												'a',
+												{ href: '#' },
+												_react2.default.createElement('i', { className: 'fa fa-google-plus-square fa-2x', 'aria-hidden': 'true' })
+											)
+										),
+										_react2.default.createElement(
+											'li',
+											null,
+											_react2.default.createElement(
+												'a',
+												{ href: '#' },
+												_react2.default.createElement('i', { className: 'fa fa-instagram fa-2x', 'aria-hidden': 'true' })
+											)
 										)
 									)
 								),
 								_react2.default.createElement(
 									'div',
-									{ className: 'col-lg-4 col-md-4' },
+									{ className: 'col-sm-4 col-xs-12 scroll-to-top-button' },
 									_react2.default.createElement(
-										'h1',
-										null,
-										'ABOUT US:'
-									),
-									_react2.default.createElement(
-										'p',
-										null,
-										'\'Delivering apps for low cost and maximum fun\''
-									),
-									_react2.default.createElement(
-										'p',
-										null,
-										'Company name \xA9 2015'
+										'a',
+										{ href: '#cover' },
+										_react2.default.createElement('i', { className: 'fa fa-chevron-circle-up fa-3x', 'aria-hidden': 'true' })
 									)
 								)
 							)
@@ -36633,7 +36628,7 @@
 								this.renderError(),
 								_react2.default.createElement(
 									'h4',
-									{ className: 'center' },
+									null,
 									'Sign up below'
 								),
 								_react2.default.createElement(

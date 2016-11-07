@@ -24,7 +24,7 @@ class LandingPage extends Component {
 								<h1>Point of Sale System</h1>
 								<p className="lightOrange">This app was built for pharmacies in Vietnam and Indonesia.
 								   Its purpose is to help pharmacies manage their inventories and sales
-									 digitally instead of through the current pen and paper.
+									 digitally instead of through the current method of pen and paper.
 								</p>
 							</div>
 						</div>
@@ -34,15 +34,18 @@ class LandingPage extends Component {
 							<div className="col-lg-4 col-md-4 wow bounceInLeft">
 								<i className="fa fa-user-md fa-3x lightPurple"></i>
 								<h4 className="lightOrange">Add Employees</h4>
-								<p>This app will sync all of your information across all your devices with just one single login.</p>
+								<p>
+								   Employees can create their own sub-profiles and login.
+								   Their sales will be tracked live and justified with store wide data.
+								</p>
 
 								<i className="fa fa-tags fa-3x turqoise"></i>
 								<h4 className="lightOrange">Add Products</h4>
-								<p>Share your location with your friends so you can keep in touch, no matter where you are.</p>
+								<p>Add products to your inventory to lay the foundation of an organized pharmacy.</p>
 
-								<i className="fa fa-battery-full fa-3x lightPink"></i>
+								<i className="fa fa fa-exchange fa-3x slateGray"></i>
 								<h4 className="lightOrange">Make Sales</h4>
-								<p>Low level battery usage will ensure that the app will not run down your battery, even when the app is running in the background.</p>
+								<p>Immediately begin making sales after login through the user friendly sell page.</p>
 							</div>
 
 							<div className="col-lg-4 col-md-4 wow fadeIn" data-wow-delay="0.2s" align="center">
@@ -50,49 +53,47 @@ class LandingPage extends Component {
 							</div>
 
 							<div className="col-lg-4 col-md-4 wow bounceInRight">
-								<i className="fa fa-share-square-o fa-3x secondaryBlue"></i>
+								<i className="fa fa-calculator fa-3x secondaryBlue"></i>
 								<h4 className="lightOrange">Manage Inventory</h4>
-								<p>Send your best posts or latest gossip to friends with the quick share button.</p>
+								<p>All products have a category which can be used to filter search results and easily locate a product's data.</p>
 
-								<i className="fa fa-film fa-3x indianRed"></i>
+								<i className="fa fa-line-chart fa-3x indianRed"></i>
 								<h4 className="lightOrange">Track Sales</h4>
-								<p>Download your videos to your device or stream video with superfast 4g data.</p>
+								<p>
+								   Track revenue data by day, week, and month in the reporting section.
+								   See which items are the top 10 sellers of the day, week, and month.
+									 Beautiful charts make sales data come alive.
+								</p>
 
 								<i className="fa fa-money fa-3x limeGreen"></i>
 								<h4 className="lightOrange">Maximize Profits</h4>
-								<p>Log into your desktop site and view your feed and videos on any browser at any time, even share links direct from your profile on the web.</p>
+								<p>Streamline inventory management and sales data to maximize profits and eliminate headaches.</p>
 							</div>
 						</div>
 					</div>
 				</div>
 
 
-				<div className="footer">
-
+				<footer className="footer">
 		      <div className="container">
-
 		        <div className="row">
-
-		          <div className="col-lg-4 col-md-4">
-		            <h1>LOGO</h1>
-		            <p>Since 2015</p>
-		            <p><em>'Delivering apps for low cost and maximum fun'</em></p>
+		          <div className="col-sm-4 col-xs-6">
+		            <p className="name">Copyright &copy; Marcus Hurney</p>
 		          </div>
-
-		          <div className="col-lg-4 col-md-4">
-		            <h1>GET IN TOUCH</h1>
-		            <p><i className="fa fa-phone"></i>1-800-888-0000</p>
-		            <p><i className="fa fa-envelope"></i><a href="mailto:info@appname.com">info@appname.com</a></p>
+		          <div className="col-sm-4 col-xs-6">
+		            <ul className="social-links">
+		              <li><a href="https://www.facebook.com/marcus.hurney"><i className="fa fa-facebook-square fa-2x" aria-hidden="true"></i></a></li>
+		              <li><a href="#"><i className="fa fa-twitter-square fa-2x" aria-hidden="true"></i></a></li>
+		              <li><a href="#"><i className="fa fa-google-plus-square fa-2x" aria-hidden="true"></i></a></li>
+		              <li><a href="#"><i className="fa fa-instagram fa-2x" aria-hidden="true"></i></a></li>
+		            </ul>
 		          </div>
-
-		          <div className="col-lg-4 col-md-4">
-		            <h1>ABOUT US:</h1>
-		            <p>'Delivering apps for low cost and maximum fun'</p>
-		            <p>Company name &copy; 2015</p>
+		          <div className="col-sm-4 col-xs-12 scroll-to-top-button">
+		            <a href="#cover"><i className="fa fa-chevron-circle-up fa-3x" aria-hidden="true"></i></a>
 		          </div>
 		        </div>
 		      </div>
-		    </div>
+		    </footer>
 			</div>
 		);
 	}
