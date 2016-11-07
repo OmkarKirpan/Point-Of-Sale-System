@@ -24,7 +24,7 @@ class LandingPage extends Component {
 								<h1>Point of Sale System</h1>
 								<p className="lightOrange">This app was built for pharmacies in Vietnam and Indonesia.
 								   Its purpose is to help pharmacies manage their inventories and sales
-									 digitally instead of through the current method of pen and paper.
+									 digitally instead of using pen and paper.
 								</p>
 							</div>
 						</div>
