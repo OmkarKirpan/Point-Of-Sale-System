@@ -54,7 +54,7 @@ class RequestReset extends Component {
 				});
 			});
 		}
-			
+
 	}
 
 	handleUpdateFormState(event) {
@@ -81,20 +81,19 @@ class RequestReset extends Component {
 
       return (
         <div className="row requestReset">
-          <div className="col-lg-6 col-md-6 col-lg-offset-3 col-md-offset-3">
+          <div className="col-lg-4 col-md-4 col-lg-offset-4 col-md-offset-4">
             <div className="form-group text-center">
 
-              <label>Email</label>
+              <h4>Your Account Email</h4>
     					<input
     						id="requestEmail"
     						className="form-control"
     						type="email"
     						name="requestEmail"
-    						placeholder="Enter your email address to reset your password"
+    						placeholder="user@gmail.com"
     						onChange={this.handleUpdateFormState} />
 
-      				<button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
-
+      				<button onClick={this.handleSubmit}>Submit</button>
       			</div>
           </div>
         </div>

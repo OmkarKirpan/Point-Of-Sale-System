@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import { loginUser, authError } from 'Actions';
 
 class LandingPage extends Component {
 
@@ -11,6 +12,21 @@ class LandingPage extends Component {
 			browserHistory.push(`/userProfile`);
 		}
 	}
+
+  loginDemoUser() {
+    const { loginUser, authError } = this.props;
+
+    loginUser({
+      email: 'demo@email.com',
+      password: 'demopass'
+    }).then(() => {
+			if (this.props.authenticated) {
+				browserHistory.push('/inventory');
+			}
+		}).catch(() => {
+			authError('Could not login demo user at this time');
+		});
+  }
 
 	render() {
 		return (
@@ -26,6 +42,12 @@ class LandingPage extends Component {
 								   Its purpose is to help pharmacies manage their inventories and sales
 									 digitally instead of using pen and paper.
 								</p>
+							</div>
+
+							<div className="col-xs-12">
+                <i className="fa fa-arrow-right fa-2x wow bounceInLeft" data-wow-delay="1s" aria-hidden="true"></i>
+								  <button id="demoBtn" onClick={this.loginDemoUser.bind(this)}>Live Demo</button>
+                <i className="fa fa-arrow-left fa-2x wow bounceInRight" data-wow-delay="1s" aria-hidden="true"></i>
 							</div>
 						</div>
 
@@ -72,28 +94,6 @@ class LandingPage extends Component {
 						</div>
 					</div>
 				</div>
-
-
-				<footer className="footer">
-		      <div className="container">
-		        <div className="row">
-		          <div className="col-sm-4 col-xs-6">
-		            <p className="name">Copyright &copy; Marcus Hurney</p>
-		          </div>
-		          <div className="col-sm-4 col-xs-6">
-		            <ul className="social-links">
-		              <li><a href="https://www.facebook.com/marcus.hurney"><i className="fa fa-facebook-square fa-2x" aria-hidden="true"></i></a></li>
-		              <li><a href="#"><i className="fa fa-twitter-square fa-2x" aria-hidden="true"></i></a></li>
-		              <li><a href="#"><i className="fa fa-google-plus-square fa-2x" aria-hidden="true"></i></a></li>
-		              <li><a href="#"><i className="fa fa-instagram fa-2x" aria-hidden="true"></i></a></li>
-		            </ul>
-		          </div>
-		          <div className="col-sm-4 col-xs-12 scroll-to-top-button">
-		            <a href="#cover"><i className="fa fa-chevron-circle-up fa-3x" aria-hidden="true"></i></a>
-		          </div>
-		        </div>
-		      </div>
-		    </footer>
 			</div>
 		);
 	}
@@ -103,4 +103,4 @@ function mapStateToProps(state) {
 	return { authenticated: state.user.authenticated };
 }
 
-export default connect(mapStateToProps, null)(LandingPage);
+export default connect(mapStateToProps, { loginUser, authError })(LandingPage);
