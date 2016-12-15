@@ -20,13 +20,10 @@ class Signout extends Component {
 
 	render() {
 		return (
-			<div className="container">
-			   <div className="row">
-					 <div className="col-lg-4 col-md-4 col-lg-offset-4 col-md-offset-4">
-						 <img id="signoutBacsiLogo" className="img-responsive" src="../images/hello_bacsi_logo.png"/>
-						 <p>Add Signout Content, Marketing Meesage Etc, Say farewell to User</p>
-					 </div>
-			   </div>
+			<div id="signOutPage">
+        <div id="signoutMessage">
+          <h1>Goodbye!</h1>
+        </div>
 			</div>
 		);
 	}

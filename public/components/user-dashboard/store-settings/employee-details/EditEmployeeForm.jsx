@@ -40,7 +40,7 @@ class EditEmployeeForm extends Component {
   }
   handleSubmitEdit(event) {
     event.preventDefault();
-      console.log("handle edit");
+
     // convert employee properties from state into JSON
     const jsonEmployee = JSON.stringify(this.state.employee);
 
@@ -52,7 +52,7 @@ class EditEmployeeForm extends Component {
   }
   handleCancelEdit(event) {
     event.preventDefault();
-    console.log("handle cancel");
+
     browserHistory.push(`/employeeProfile/${this.props.singleEmployee._id}`);
   }
 

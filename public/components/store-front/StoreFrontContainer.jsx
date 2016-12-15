@@ -185,7 +185,7 @@ class StoreFrontContainer extends Component {
                       handleFilter={this.handleFilter} />
 
                     <p id="topProductsMessage">
-                      Top <span className="secondaryBlue">{showProductsNum}</span> Products
+                      Top <span className="secondaryBlue">{showProductsNum}</span> Sellers
                     </p>
 
 									</div>
