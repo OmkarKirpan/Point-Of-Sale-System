@@ -73,7 +73,7 @@
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _reduxPromise = __webpack_require__(535);
+	var _reduxPromise = __webpack_require__(534);
 
 	var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
 
@@ -393,8 +393,15 @@
 /* 4 */
 /***/ function(module, exports) {
 
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+
 	'use strict';
 	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -415,7 +422,7 @@
 			// Detect buggy property enumeration order in older V8 versions.
 
 			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
 			test1[5] = 'de';
 			if (Object.getOwnPropertyNames(test1)[0] === '5') {
 				return false;
@@ -444,7 +451,7 @@
 			}
 
 			return true;
-		} catch (e) {
+		} catch (err) {
 			// We don't expect any of the above to throw, but better to be safe.
 			return false;
 		}
@@ -464,8 +471,8 @@
 				}
 			}
 
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
 					if (propIsEnumerable.call(from, symbols[i])) {
 						to[symbols[i]] = from[symbols[i]];
@@ -745,17 +752,6 @@
 	  }
 	};
 
-	var fiveArgumentPooler = function (a1, a2, a3, a4, a5) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4, a5);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4, a5);
-	  }
-	};
-
 	var standardReleaser = function (instance) {
 	  var Klass = this;
 	  !(instance instanceof Klass) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
@@ -795,8 +791,7 @@
 	  oneArgumentPooler: oneArgumentPooler,
 	  twoArgumentPooler: twoArgumentPooler,
 	  threeArgumentPooler: threeArgumentPooler,
-	  fourArgumentPooler: fourArgumentPooler,
-	  fiveArgumentPooler: fiveArgumentPooler
+	  fourArgumentPooler: fourArgumentPooler
 	};
 
 	module.exports = PooledClass;
@@ -872,12 +867,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
+	var validateFormat = function validateFormat(format) {};
+
+	if (process.env.NODE_ENV !== 'production') {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 
 	  if (!condition) {
 	    var error;
@@ -3130,7 +3131,14 @@
 	    // We warn in this case but don't throw. We expect the element creation to
 	    // succeed and there will likely be errors in render.
 	    if (!validType) {
-	      process.env.NODE_ENV !== 'production' ? warning(false, 'React.createElement: type should not be null, undefined, boolean, or ' + 'number. It should be a string (for DOM elements) or a ReactClass ' + '(for composite components).%s', getDeclarationErrorAddendum()) : void 0;
+	      if (typeof type !== 'function' && typeof type !== 'string') {
+	        var info = '';
+	        if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
+	          info += ' You likely forgot to export your component from the file ' + 'it\'s defined in.';
+	        }
+	        info += getDeclarationErrorAddendum();
+	        process.env.NODE_ENV !== 'production' ? warning(false, 'React.createElement: type is invalid -- expected a string (for ' + 'built-in components) or a class/function (for composite ' + 'components) but got: %s.%s', type == null ? type : typeof type, info) : void 0;
+	      }
 	    }
 
 	    var element = ReactElement.createElement.apply(this, arguments);
@@ -4101,7 +4109,7 @@
 
 	'use strict';
 
-	module.exports = '15.4.1';
+	module.exports = '15.4.2';
 
 /***/ },
 /* 31 */
@@ -4300,6 +4308,13 @@
 	var internalInstanceKey = '__reactInternalInstance$' + Math.random().toString(36).slice(2);
 
 	/**
+	 * Check if a given node should be cached.
+	 */
+	function shouldPrecacheNode(node, nodeID) {
+	  return node.nodeType === 1 && node.getAttribute(ATTR_NAME) === String(nodeID) || node.nodeType === 8 && node.nodeValue === ' react-text: ' + nodeID + ' ' || node.nodeType === 8 && node.nodeValue === ' react-empty: ' + nodeID + ' ';
+	}
+
+	/**
 	 * Drill down (through composites and empty components) until we get a host or
 	 * host text component.
 	 *
@@ -4364,7 +4379,7 @@
 	    }
 	    // We assume the child nodes are in the same order as the child instances.
 	    for (; childNode !== null; childNode = childNode.nextSibling) {
-	      if (childNode.nodeType === 1 && childNode.getAttribute(ATTR_NAME) === String(childID) || childNode.nodeType === 8 && childNode.nodeValue === ' react-text: ' + childID + ' ' || childNode.nodeType === 8 && childNode.nodeValue === ' react-empty: ' + childID + ' ') {
+	      if (shouldPrecacheNode(childNode, childID)) {
 	        precacheNode(childInst, childNode);
 	        continue outer;
 	      }
@@ -6605,17 +6620,6 @@
 	  }
 	};
 
-	var fiveArgumentPooler = function (a1, a2, a3, a4, a5) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4, a5);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4, a5);
-	  }
-	};
-
 	var standardReleaser = function (instance) {
 	  var Klass = this;
 	  !(instance instanceof Klass) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
@@ -6655,8 +6659,7 @@
 	  oneArgumentPooler: oneArgumentPooler,
 	  twoArgumentPooler: twoArgumentPooler,
 	  threeArgumentPooler: threeArgumentPooler,
-	  fourArgumentPooler: fourArgumentPooler,
-	  fiveArgumentPooler: fiveArgumentPooler
+	  fourArgumentPooler: fourArgumentPooler
 	};
 
 	module.exports = PooledClass;
@@ -11474,12 +11477,18 @@
 	    } else {
 	      var contentToUse = CONTENT_TYPES[typeof props.children] ? props.children : null;
 	      var childrenToUse = contentToUse != null ? null : props.children;
+	      // TODO: Validate that text is allowed as a child of this node
 	      if (contentToUse != null) {
-	        // TODO: Validate that text is allowed as a child of this node
-	        if (process.env.NODE_ENV !== 'production') {
-	          setAndValidateContentChildDev.call(this, contentToUse);
+	        // Avoid setting textContent when the text is empty. In IE11 setting
+	        // textContent on a text area will cause the placeholder to not
+	        // show within the textarea until it has been focused and blurred again.
+	        // https://github.com/facebook/react/issues/6731#issuecomment-254874553
+	        if (contentToUse !== '') {
+	          if (process.env.NODE_ENV !== 'production') {
+	            setAndValidateContentChildDev.call(this, contentToUse);
+	          }
+	          DOMLazyTree.queueText(lazyTree, contentToUse);
 	        }
-	        DOMLazyTree.queueText(lazyTree, contentToUse);
 	      } else if (childrenToUse != null) {
 	        var mountImages = this.mountChildren(childrenToUse, transaction, context);
 	        for (var i = 0; i < mountImages.length; i++) {
@@ -13399,7 +13408,17 @@
 	      }
 	    } else {
 	      if (props.value == null && props.defaultValue != null) {
-	        node.defaultValue = '' + props.defaultValue;
+	        // In Chrome, assigning defaultValue to certain input types triggers input validation.
+	        // For number inputs, the display value loses trailing decimal points. For email inputs,
+	        // Chrome raises "The specified value <x> is not a valid email address".
+	        //
+	        // Here we check to see if the defaultValue has actually changed, avoiding these problems
+	        // when the user is inputting text
+	        //
+	        // https://github.com/facebook/react/issues/7253
+	        if (node.defaultValue !== '' + props.defaultValue) {
+	          node.defaultValue = '' + props.defaultValue;
+	        }
 	      }
 	      if (props.checked == null && props.defaultChecked != null) {
 	        node.defaultChecked = !!props.defaultChecked;
@@ -14146,9 +14165,15 @@
 	    // This is in postMount because we need access to the DOM node, which is not
 	    // available until after the component has mounted.
 	    var node = ReactDOMComponentTree.getNodeFromInstance(inst);
+	    var textContent = node.textContent;
 
-	    // Warning: node.value may be the empty string at this point (IE11) if placeholder is set.
-	    node.value = node.textContent; // Detach value from defaultValue
+	    // Only set node.value if textContent is equal to the expected
+	    // initial value. In IE10/IE11 there is a bug where the placeholder attribute
+	    // will populate textContent as well.
+	    // https://developer.microsoft.com/microsoft-edge/platform/issues/101525/
+	    if (textContent === inst._wrapperState.initialValue) {
+	      node.value = textContent;
+	    }
 	  }
 	};
 
@@ -14950,7 +14975,17 @@
 	    instance = ReactEmptyComponent.create(instantiateReactComponent);
 	  } else if (typeof node === 'object') {
 	    var element = node;
-	    !(element && (typeof element.type === 'function' || typeof element.type === 'string')) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s', element.type == null ? element.type : typeof element.type, getDeclarationErrorAddendum(element._owner)) : _prodInvariant('130', element.type == null ? element.type : typeof element.type, getDeclarationErrorAddendum(element._owner)) : void 0;
+	    var type = element.type;
+	    if (typeof type !== 'function' && typeof type !== 'string') {
+	      var info = '';
+	      if (process.env.NODE_ENV !== 'production') {
+	        if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
+	          info += ' You likely forgot to export your component from the file ' + 'it\'s defined in.';
+	        }
+	      }
+	      info += getDeclarationErrorAddendum(element._owner);
+	       true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s', type == null ? type : typeof type, info) : _prodInvariant('130', type == null ? type : typeof type, info) : void 0;
+	    }
 
 	    // Special case string values
 	    if (typeof element.type === 'string') {
@@ -15240,7 +15275,7 @@
 	      // Since plain JS classes are defined without any special initialization
 	      // logic, we can not catch common errors early. Therefore, we have to
 	      // catch them here, at initialization time, instead.
-	      process.env.NODE_ENV !== 'production' ? warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', this.getName() || 'a component') : void 0;
+	      process.env.NODE_ENV !== 'production' ? warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved || inst.state, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', this.getName() || 'a component') : void 0;
 	      process.env.NODE_ENV !== 'production' ? warning(!inst.getDefaultProps || inst.getDefaultProps.isReactClassApproved, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', this.getName() || 'a component') : void 0;
 	      process.env.NODE_ENV !== 'production' ? warning(!inst.propTypes, 'propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', this.getName() || 'a component') : void 0;
 	      process.env.NODE_ENV !== 'production' ? warning(!inst.contextTypes, 'contextTypes was defined as an instance property on %s. Use a ' + 'static property to define contextTypes instead.', this.getName() || 'a component') : void 0;
@@ -16244,14 +16279,11 @@
 
 	'use strict';
 
-	var _prodInvariant = __webpack_require__(35),
-	    _assign = __webpack_require__(4);
+	var _prodInvariant = __webpack_require__(35);
 
 	var invariant = __webpack_require__(8);
 
 	var genericComponentClass = null;
-	// This registry keeps track of wrapper classes around host tags.
-	var tagToComponentClass = {};
 	var textComponentClass = null;
 
 	var ReactHostComponentInjection = {
@@ -16264,11 +16296,6 @@
 	  // rendered as props.
 	  injectTextComponentClass: function (componentClass) {
 	    textComponentClass = componentClass;
-	  },
-	  // This accepts a keyed object with classes as values. Each key represents a
-	  // tag. That particular tag will use this class instead of the generic one.
-	  injectComponentClasses: function (componentClasses) {
-	    _assign(tagToComponentClass, componentClasses);
 	  }
 	};
 
@@ -21123,7 +21150,7 @@
 
 	'use strict';
 
-	module.exports = '15.4.1';
+	module.exports = '15.4.2';
 
 /***/ },
 /* 172 */
@@ -22520,8 +22547,7 @@
 	  if (value == null) {
 	    return value === undefined ? undefinedTag : nullTag;
 	  }
-	  value = Object(value);
-	  return (symToStringTag && symToStringTag in value)
+	  return (symToStringTag && symToStringTag in Object(value))
 	    ? getRawTag(value)
 	    : objectToString(value);
 	}
@@ -23235,8 +23261,7 @@
 	  if (value == null) {
 	    return value === undefined ? undefinedTag : nullTag;
 	  }
-	  value = Object(value);
-	  return (symToStringTag && symToStringTag in value)
+	  return (symToStringTag && symToStringTag in Object(value))
 	    ? getRawTag(value)
 	    : objectToString(value);
 	}
@@ -35938,23 +35963,23 @@
 
 	var _SalesHistoryContainer2 = _interopRequireDefault(_SalesHistoryContainer);
 
-	var _ReportingContainer = __webpack_require__(519);
+	var _ReportingContainer = __webpack_require__(518);
 
 	var _ReportingContainer2 = _interopRequireDefault(_ReportingContainer);
 
-	var _ManageProductForm = __webpack_require__(531);
+	var _ManageProductForm = __webpack_require__(530);
 
 	var _ManageProductForm2 = _interopRequireDefault(_ManageProductForm);
 
-	var _RequestReset = __webpack_require__(532);
+	var _RequestReset = __webpack_require__(531);
 
 	var _RequestReset2 = _interopRequireDefault(_RequestReset);
 
-	var _ForgotPassword = __webpack_require__(533);
+	var _ForgotPassword = __webpack_require__(532);
 
 	var _ForgotPassword2 = _interopRequireDefault(_ForgotPassword);
 
-	var _ForgotEmployeePassword = __webpack_require__(534);
+	var _ForgotEmployeePassword = __webpack_require__(533);
 
 	var _ForgotEmployeePassword2 = _interopRequireDefault(_ForgotEmployeePassword);
 
@@ -79219,7 +79244,7 @@
 
 	var _SalesHistoryTable2 = _interopRequireDefault(_SalesHistoryTable);
 
-	var _SalesSearchForm = __webpack_require__(516);
+	var _SalesSearchForm = __webpack_require__(515);
 
 	var _SalesSearchForm2 = _interopRequireDefault(_SalesSearchForm);
 
@@ -79446,7 +79471,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ExpandProductIcon = __webpack_require__(515);
+	var _ExpandProductIcon = __webpack_require__(541);
 
 	var _ExpandProductIcon2 = _interopRequireDefault(_ExpandProductIcon);
 
@@ -79455,40 +79480,45 @@
 	var SalesHistoryRow = function SalesHistoryRow(_ref) {
 	  var sale = _ref.sale;
 
-	  return _react2.default.createElement(
-	    'tr',
-	    { className: 'salesHistoryRow wow flipInX' },
-	    _react2.default.createElement(
-	      'td',
-	      null,
-	      sale._id
-	    ),
-	    _react2.default.createElement(
-	      'td',
-	      null,
-	      sale.date.year,
-	      ' / ',
-	      sale.date.month + 1,
-	      ' / ',
-	      sale.date.day
-	    ),
-	    _react2.default.createElement(
-	      'td',
-	      null,
-	      '$',
-	      sale.total
-	    ),
-	    _react2.default.createElement(
-	      'td',
-	      null,
-	      sale.items.length >= 2 ? sale.items[0].itemName + ', ' + sale.items[1].itemName + '...' : sale.items[0].itemName + '...'
-	    ),
-	    _react2.default.createElement(
-	      'td',
-	      null,
-	      _react2.default.createElement(_ExpandProductIcon2.default, { route: '/saleDetails/' + sale._id })
-	    )
-	  );
+	  // only return a row containing a sale if there are items in the sale
+	  if (sale.items.length) {
+	    return _react2.default.createElement(
+	      'tr',
+	      { className: 'salesHistoryRow wow flipInX' },
+	      _react2.default.createElement(
+	        'td',
+	        null,
+	        sale._id
+	      ),
+	      _react2.default.createElement(
+	        'td',
+	        null,
+	        sale.date.year,
+	        ' / ',
+	        sale.date.month + 1,
+	        ' / ',
+	        sale.date.day
+	      ),
+	      _react2.default.createElement(
+	        'td',
+	        null,
+	        '$',
+	        sale.total
+	      ),
+	      _react2.default.createElement(
+	        'td',
+	        null,
+	        sale.items.length >= 2 ? sale.items[0].itemName + ', ' + sale.items[1].itemName + '...' : sale.items[0].itemName + '...'
+	      ),
+	      _react2.default.createElement(
+	        'td',
+	        null,
+	        _react2.default.createElement(_ExpandProductIcon2.default, { route: '/saleDetails/' + sale._id })
+	      )
+	    );
+	  }
+	  // else return null
+	  return null;
 	};
 
 	SalesHistoryRow.propTypes = {
@@ -79499,42 +79529,6 @@
 
 /***/ },
 /* 515 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(218);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ExpandProductIcon = function ExpandProductIcon(_ref) {
-	  var route = _ref.route;
-
-	  return _react2.default.createElement(
-	    _reactRouter.Link,
-	    { to: route },
-	    _react2.default.createElement('i', { id: 'expandProductIcon',
-	      className: 'fa fa-arrows-alt',
-	      'aria-hidden': 'true' })
-	  );
-	};
-
-	ExpandProductIcon.propTypes = {
-	  route: _react.PropTypes.string
-	};
-
-		exports.default = ExpandProductIcon;
-
-/***/ },
-/* 516 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79553,11 +79547,11 @@
 
 	var _Actions = __webpack_require__(325);
 
-	var _ComboBox = __webpack_require__(517);
+	var _ComboBox = __webpack_require__(516);
 
 	var _ComboBox2 = _interopRequireDefault(_ComboBox);
 
-	var _config = __webpack_require__(518);
+	var _config = __webpack_require__(517);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -79738,7 +79732,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchSalesByDate: _Actions.fetchSalesByDate, fetchSales: _Actions.fetchSales })(SalesSearchForm);
 
 /***/ },
-/* 517 */
+/* 516 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -79778,7 +79772,7 @@
 	exports.default = ComboBox;
 
 /***/ },
-/* 518 */
+/* 517 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -79860,7 +79854,7 @@
 		var comboDays = exports.comboDays = [{ name: 1 }, { name: 2 }, { name: 3 }, { name: 4 }, { name: 5 }, { name: 6 }, { name: 7 }, { name: 8 }, { name: 9 }, { name: 10 }, { name: 11 }, { name: 12 }, { name: 13 }, { name: 14 }, { name: 15 }, { name: 16 }, { name: 17 }, { name: 18 }, { name: 19 }, { name: 20 }, { name: 21 }, { name: 22 }, { name: 23 }, { name: 24 }, { name: 25 }, { name: 26 }, { name: 27 }, { name: 28 }, { name: 29 }, { name: 30 }, { name: 31 }];
 
 /***/ },
-/* 519 */
+/* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79879,35 +79873,35 @@
 
 	var _Actions = __webpack_require__(325);
 
-	var _RevenueThumbnail = __webpack_require__(520);
+	var _RevenueThumbnail = __webpack_require__(519);
 
 	var _RevenueThumbnail2 = _interopRequireDefault(_RevenueThumbnail);
 
-	var _TopItemsPanel = __webpack_require__(521);
+	var _TopItemsPanel = __webpack_require__(520);
 
 	var _TopItemsPanel2 = _interopRequireDefault(_TopItemsPanel);
 
-	var _TodaysRevenueChart = __webpack_require__(522);
+	var _TodaysRevenueChart = __webpack_require__(521);
 
 	var _TodaysRevenueChart2 = _interopRequireDefault(_TodaysRevenueChart);
 
-	var _ThisWeeksRevenueChart = __webpack_require__(523);
+	var _ThisWeeksRevenueChart = __webpack_require__(522);
 
 	var _ThisWeeksRevenueChart2 = _interopRequireDefault(_ThisWeeksRevenueChart);
 
-	var _AllMonthsRevenueChart = __webpack_require__(524);
+	var _AllMonthsRevenueChart = __webpack_require__(523);
 
 	var _AllMonthsRevenueChart2 = _interopRequireDefault(_AllMonthsRevenueChart);
 
-	var _TodaysTopItemsTable = __webpack_require__(525);
+	var _TodaysTopItemsTable = __webpack_require__(524);
 
 	var _TodaysTopItemsTable2 = _interopRequireDefault(_TodaysTopItemsTable);
 
-	var _WeeksTopItemsTable = __webpack_require__(527);
+	var _WeeksTopItemsTable = __webpack_require__(526);
 
 	var _WeeksTopItemsTable2 = _interopRequireDefault(_WeeksTopItemsTable);
 
-	var _MonthsTopItemsTable = __webpack_require__(529);
+	var _MonthsTopItemsTable = __webpack_require__(528);
 
 	var _MonthsTopItemsTable2 = _interopRequireDefault(_MonthsTopItemsTable);
 
@@ -80047,7 +80041,7 @@
 		calculateEveryMonthsRevenue: _Actions.calculateEveryMonthsRevenue })(ReportingContainer);
 
 /***/ },
-/* 520 */
+/* 519 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -80102,7 +80096,7 @@
 	exports.default = RevenueThumbnail;
 
 /***/ },
-/* 521 */
+/* 520 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -80150,7 +80144,7 @@
 	exports.default = TopItemsPanel;
 
 /***/ },
-/* 522 */
+/* 521 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80253,7 +80247,7 @@
 		exports.default = TodaysRevenueChart;
 
 /***/ },
-/* 523 */
+/* 522 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80355,7 +80349,7 @@
 		exports.default = ThisWeeksRevenueChart;
 
 /***/ },
-/* 524 */
+/* 523 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80449,7 +80443,7 @@
 		exports.default = AllMonthsRevenueChart;
 
 /***/ },
-/* 525 */
+/* 524 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80462,7 +80456,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _TodaysTopItemsRow = __webpack_require__(526);
+	var _TodaysTopItemsRow = __webpack_require__(525);
 
 	var _TodaysTopItemsRow2 = _interopRequireDefault(_TodaysTopItemsRow);
 
@@ -80524,7 +80518,7 @@
 	exports.default = TodaysTopItemsTable;
 
 /***/ },
-/* 526 */
+/* 525 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80583,7 +80577,7 @@
 		exports.default = TodaysTopItemsRow;
 
 /***/ },
-/* 527 */
+/* 526 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80596,7 +80590,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _WeeksTopItemsRow = __webpack_require__(528);
+	var _WeeksTopItemsRow = __webpack_require__(527);
 
 	var _WeeksTopItemsRow2 = _interopRequireDefault(_WeeksTopItemsRow);
 
@@ -80658,7 +80652,7 @@
 	exports.default = WeeksTopItemsTable;
 
 /***/ },
-/* 528 */
+/* 527 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80717,7 +80711,7 @@
 		exports.default = WeeksTopItemsRow;
 
 /***/ },
-/* 529 */
+/* 528 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80730,7 +80724,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _MonthsTopItemsRow = __webpack_require__(530);
+	var _MonthsTopItemsRow = __webpack_require__(529);
 
 	var _MonthsTopItemsRow2 = _interopRequireDefault(_MonthsTopItemsRow);
 
@@ -80792,7 +80786,7 @@
 	exports.default = MonthsTopItemsTable;
 
 /***/ },
-/* 530 */
+/* 529 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80851,7 +80845,7 @@
 		exports.default = MonthsTopItemsRow;
 
 /***/ },
-/* 531 */
+/* 530 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80888,7 +80882,7 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _config = __webpack_require__(518);
+	var _config = __webpack_require__(517);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81155,7 +81149,7 @@
 		editExistingProduct: _Actions.editExistingProduct, deleteExistingProduct: _Actions.deleteExistingProduct })(ManageProductForm);
 
 /***/ },
-/* 532 */
+/* 531 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81322,7 +81316,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { forgotPassword: _Actions.forgotPassword, forgotEmployeePassword: _Actions.forgotEmployeePassword })(RequestReset);
 
 /***/ },
-/* 533 */
+/* 532 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81487,7 +81481,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { resetPassword: _Actions.resetPassword, authError: _Actions.authError })(ForgotPassword);
 
 /***/ },
-/* 534 */
+/* 533 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81644,7 +81638,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { resetEmployeePassword: _Actions.resetEmployeePassword, authError: _Actions.authError })(ForgotPassword);
 
 /***/ },
-/* 535 */
+/* 534 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81655,7 +81649,7 @@
 
 	exports['default'] = promiseMiddleware;
 
-	var _fluxStandardAction = __webpack_require__(536);
+	var _fluxStandardAction = __webpack_require__(535);
 
 	function isPromise(val) {
 	  return val && typeof val.then === 'function';
@@ -81682,7 +81676,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 536 */
+/* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81693,7 +81687,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodashIsplainobject = __webpack_require__(537);
+	var _lodashIsplainobject = __webpack_require__(536);
 
 	var _lodashIsplainobject2 = _interopRequireDefault(_lodashIsplainobject);
 
@@ -81712,7 +81706,7 @@
 	}
 
 /***/ },
-/* 537 */
+/* 536 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -81723,9 +81717,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(538),
-	    isArguments = __webpack_require__(539),
-	    keysIn = __webpack_require__(540);
+	var baseFor = __webpack_require__(537),
+	    isArguments = __webpack_require__(538),
+	    keysIn = __webpack_require__(539);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -81821,7 +81815,7 @@
 
 
 /***/ },
-/* 538 */
+/* 537 */
 /***/ function(module, exports) {
 
 	/**
@@ -81875,7 +81869,7 @@
 
 
 /***/ },
-/* 539 */
+/* 538 */
 /***/ function(module, exports) {
 
 	/**
@@ -82110,7 +82104,7 @@
 
 
 /***/ },
-/* 540 */
+/* 539 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -82121,8 +82115,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(539),
-	    isArray = __webpack_require__(541);
+	var isArguments = __webpack_require__(538),
+	    isArray = __webpack_require__(540);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -82248,7 +82242,7 @@
 
 
 /***/ },
-/* 541 */
+/* 540 */
 /***/ function(module, exports) {
 
 	/**
@@ -82432,6 +82426,42 @@
 
 	module.exports = isArray;
 
+
+/***/ },
+/* 541 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(218);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ExpandProductIcon = function ExpandProductIcon(_ref) {
+	  var route = _ref.route;
+
+	  return _react2.default.createElement(
+	    _reactRouter.Link,
+	    { to: route },
+	    _react2.default.createElement('i', { id: 'expandProductIcon',
+	      className: 'fa fa-arrows-alt',
+	      'aria-hidden': 'true' })
+	  );
+	};
+
+	ExpandProductIcon.propTypes = {
+	  route: _react.PropTypes.string
+	};
+
+		exports.default = ExpandProductIcon;
 
 /***/ }
 /******/ ]);
